@@ -17,6 +17,7 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
         case_sensitive = True
+        extra = "ignore"  # Ignora variáveis de ambiente extras (ex: VITE_API_URL do frontend)
 
 
 settings = Settings()
