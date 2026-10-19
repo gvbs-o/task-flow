@@ -1,130 +1,167 @@
-# task-flow
+# 🚀 TaskFlow
 
-Aplicação fullstack de gerenciamento de tarefas com React, FastAPI e PostgreSQL.
+Aplicação fullstack moderna para gerenciamento de tarefas com React, FastAPI e PostgreSQL.
 
-## Stack
+**📖 Documentação para iniciantes:** Veja [docs/QUICKSTART.md](docs/QUICKSTART.md) para um guia passo a passo simplificado.
 
-- **Frontend:** React 18, Vite, Tailwind CSS, Redux Toolkit
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+- **Frontend:** React 18, Vite, Tailwind CSS, Redux Toolkit, TypeScript
 - **Backend:** FastAPI, Python 3.11+
-- **Database:** PostgreSQL com ORM SQLAlchemy
+- **Banco de Dados:** PostgreSQL & SQLAlchemy (ORM)
 - **Migrations:** Alembic
 
-## Arquitetura
+---
 
-### Backend (FastAPI)
-- `backend/main.py` - Entrypoint do FastAPI com CORS e routers
-- `backend/config/` - Configurações do sistema
-- `backend/db/` - Models SQLAlchemy e conexão com o banco
-- `backend/models/` - Schemas Pydantic (request/response)
-- `backend/repositories/` - Camada de acesso aos dados
-- `backend/services/` - Camada de lógica de negócio
-- `backend/api/routes/` - Endpoints da API
+## 📌 Arquitetura do Projeto
 
-### Frontend (React)
-- `frontend/src/components/` - Componentes de UI
-- `frontend/src/services/` - Chamadas à API (fetch)
-- `frontend/src/store/` - Gerenciamento de estado com Redux Toolkit
-- `frontend/src/types/` - Tipos TypeScript
-- `frontend/src/hooks/` - Hooks customizados
-
-## Segurança
-
-- Credenciais do PostgreSQL são armazenadas apenas nas variáveis de ambiente do backend
-- Frontend nunca se conecta diretamente ao banco de dados
-- Todo acesso ao banco é feito através da API FastAPI
-- CORS está configurado para permitir requisições do frontend
-
-## Configuração
-
-### Pré-requisitos
-
-- Python 3.11+
-- Node.js 18+
-- PostgreSQL rodando localmente (ou via Docker)
-
-### Configuração do Backend
-
-1. Crie um ambiente virtual:
-```bash
-python -m venv venv
-source venv/bin/activate  # No Windows: venv\Scripts\activate
+```text
+task-flow/
+├── backend/               # Código-fonte da API
+│   ├── api/routes/        # Endpoints da aplicação
+│   ├── config/            # Variáveis e configurações do sistema
+│   ├── db/                # Conexão e Models SQLAlchemy
+│   ├── models/            # Schemas Pydantic (validação de dados)
+│   ├── repositories/      # Camada de acesso ao banco de dados
+│   ├── services/          # Regras de negócio
+│   └── main.py            # Entrypoint do servidor FastAPI
+│
+└── frontend/              # Código-fonte da interface web
+    └── src/
+        ├── components/    # Componentes reutilizáveis de UI
+        ├── hooks/         # Hooks customizados React
+        ├── services/      # Integrações de API (fetch)
+        ├── store/         # Gerenciamento de estado global (Redux)
+        └── types/         # Definições de tipos TypeScript
 ```
 
-2. Instale as dependências:
-```bash
-pip install -r requirements.txt
-```
+---
 
-3. Copie as variáveis de ambiente:
-```bash
-cp .env.example .env
-```
+## 🔐 Segurança
 
-4. Edite o `.env` e configure sua conexão PostgreSQL:
-```
-DATABASE_URL=postgresql://user:password@localhost:5432/taskflow
-```
+- **Isolamento do Banco de Dados:** O frontend **nunca** se conecta diretamente ao banco.
+- **Variáveis de Ambiente:** Credenciais e URLs sensíveis ficam armazenadas apenas no backend via `.env`.
+- **CORS Configurado:** Apenas origens autorizadas podem consumir os recursos da API.
 
-5. Crie o banco de dados:
-```bash
-psql -U postgres -c "CREATE DATABASE taskflow;"
-```
+---
 
-6. Execute as migrations:
-```bash
-alembic upgrade head
-```
+## ⚡ Como Executar a Aplicação (Passo a Passo)
 
-7. Inicie o backend:
-```bash
-uvicorn backend.main:app --reload
-```
+### 📋 Pré-requisitos
+Antes de começar, certifique-se de ter instalado em sua máquina:
+- [Python 3.11+](https://www.python.org/)
+- [Node.js 18+](https://nodejs.org/)
+- [PostgreSQL](https://www.postgresql.org/) rodando localmente (ou via Docker)
 
-A API estará disponível em `http://localhost:8000`
+---
 
-### Configuração do Frontend
+### 🟢 ETAPA 1: Configurar e Rodar o Backend
 
-1. Navegue até o diretório frontend:
-```bash
-cd frontend
-```
+Abra um terminal na raiz do projeto (`task-flow/`):
 
-2. Instale as dependências:
-```bash
-npm install
-```
+1. **Crie e ative o ambiente virtual do Python:**
+   - **Linux / macOS:**
+     ```bash
+     python -m venv venv
+     source venv/bin/activate
+     ```
+   - **Windows (PowerShell):**
+     ```powershell
+     python -m venv venv
+     .\venv\Scripts\activate
+     ```
 
-3. Inicie o servidor de desenvolvimento:
-```bash
-npm run dev
-```
+2. **Instale as dependências do Python:**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-O frontend estará disponível em `http://localhost:5173`
+3. **Configure as Variáveis de Ambiente:**
+   Copie o arquivo de exemplo para criar o seu `.env`:
+   ```bash
+   cp .env.example .env
+   ```
+   Abra o arquivo `.env` gerado e ajuste a URL do seu banco de dados, se necessário:
+   ```env
+   DATABASE_URL=postgresql://seu_usuario:sua_senha@localhost:5432/taskflow
+   ```
 
-## Migrations do Banco de Dados
+4. **Crie o Banco de Dados no PostgreSQL:**
+   Execute o comando abaixo ou crie manualmente o banco com o nome `taskflow`:
+   ```bash
+   psql -U postgres -c "CREATE DATABASE taskflow;"
+   ```
 
-Após modificar os models SQLAlchemy, crie uma nova migration:
+5. **Execute as Migrations:**
+   Aplique a estrutura das tabelas no banco de dados:
+   ```bash
+   alembic upgrade head
+   ```
 
-```bash
-alembic revision --autogenerate -m "descrição das alterações"
-```
+6. **Inicie o servidor Backend:**
+   ```bash
+   uvicorn backend.main:app --reload
+   ```
+   > 📍 **Servidor rodando em:** `http://localhost:8000`  
+   > 📑 **Documentação Swagger da API:** `http://localhost:8000/docs`
 
-Aplique a migration:
+---
 
-```bash
-alembic upgrade head
-```
+### 🔵 ETAPA 2: Configurar e Rodar o Frontend
 
-## Endpoints da API
+Abra um **novo terminal** na pasta do projeto:
 
-- `GET /api/tasks` - Listar todas as tarefas
-- `POST /api/tasks` - Criar uma nova tarefa
-- `GET /api/tasks/{id}` - Obter uma tarefa específica
-- `PUT /api/tasks/{id}` - Atualizar uma tarefa
-- `DELETE /api/tasks/{id}` - Excluir uma tarefa
+1. **Acesse a pasta do frontend:**
+   ```bash
+   cd frontend
+   ```
 
-## Desenvolvimento
+2. **Instale os pacotes e dependências:**
+   ```bash
+   npm install
+   ```
 
-- Backend roda na porta 8000
-- Frontend roda na porta 5173
-- URL base da API: `http://localhost:8000`
+3. **Inicie o servidor de desenvolvimento:**
+   ```bash
+   npm run dev
+   ```
+   > 📍 **Aplicação rodando em:** `http://localhost:5173`
+
+---
+
+## 🔄 Gerenciando Migrations no Banco de Dados
+
+**📚 Guia completo:** Para um tutorial detalhado com exemplos, troubleshooting e fluxo de trabalho, consulte [docs/alembic-guide.md](docs/alembic-guide.md).
+
+Sempre que alterar os modelos SQLAlchemy em `backend/db/`:
+
+1. **Gere uma nova migration:**
+   ```bash
+   alembic revision --autogenerate -m "descreva a alteracao realizada"
+   ```
+
+2. **Aplique as alterações no banco:**
+   ```bash
+   alembic upgrade head
+   ```
+
+---
+
+## 🌐 Principais Endpoints da API
+
+| Método | Endpoint | Descrição |
+|---|---|---|
+| **GET** | `/api/tasks` | Retorna todas as tarefas salvas |
+| **POST** | `/api/tasks` | Cria uma nova tarefa |
+| **GET** | `/api/tasks/{id}` | Busca os detalhes de uma tarefa específica |
+| **PUT** | `/api/tasks/{id}` | Atualiza uma tarefa existente |
+| **DELETE** | `/api/tasks/{id}` | Remove uma tarefa do banco |
+
+---
+
+## 💻 Resumo das Portas Locais
+
+- **API / Backend:** `http://localhost:8000`
+- **Interface / Frontend:** `http://localhost:5173`
